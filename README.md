@@ -27,6 +27,14 @@ A library implementing different string similarity and distance measures. A doze
 * [Users](#users)
 
 
+## Download
+
+```bash
+git clone https://github.com/luozhouyang/python-string-similarity
+cd python-string-similarity
+pip install -r requirements.txt
+```
+
 ## Overview
 
 The main characteristics of each implemented algorithm are presented below. The "cost" column gives an estimation of the computational cost to compute the similarity between two strings of length m and n respectively.
