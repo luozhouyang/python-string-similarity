@@ -9,7 +9,7 @@ class Jaccard(ShingleBased, MetricStringDistance, NormalizedStringDistance, Norm
         super().__init__(k)
 
     def distance(self, s0, s1):
-        1.0 - self.similarity(s0, s1)
+        return 1.0 - self.similarity(s0, s1)
 
     def similarity(self, s0, s1):
         if s0 is None:
