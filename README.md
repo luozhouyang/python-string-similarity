@@ -70,9 +70,7 @@ Generally, algorithms that implement NormalizedStringSimilarity also implement N
 ### Metric distances
 The MetricStringDistance interface : A few of the distances are actually metric distances, which means that verify the triangle inequality d(x, y) <= d(x,z) + d(z,y). For example, Levenshtein is a metric distance, but NormalizedLevenshtein is not.
 
-A lot of nearest-neighbor search algorithms and indexing structures rely on the triangle inequality. You can check "Similarity Search, The Metric Space Approach" by Zezula et al. for a survey. These cannot be used with non metric similarity measures.
-
-[Read Javadoc for a detailed description](http://www.javadoc.io/doc/info.debatty/java-string-similarity)
+A lot of nearest-neighbor search algorithms and indexing structures rely on the triangle inequality. 
 
 ## Shingles (n-gram) based similarity and distance
 A few algorithms work by converting strings into sets of n-grams (sequences of n characters, also sometimes called k-shingles). The similarity or distance between the strings is then the similarity or distance between the sets.
@@ -88,40 +86,35 @@ The Levenshtein distance between two words is the minimum number of single-chara
 
 It is a metric string distance. This implementation uses dynamic programming (Wagner–Fischer algorithm), with only 2 rows of data. The space requirement is thus O(m) and the algorithm runs in O(m.n).
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.levenshtein import Levenshtein
 
-public class MyApp {
+levenshtein = Levenshtein()
+print(levenshtein.distance('My string', 'My $string'))
+print(levenshtein.distance('My string', 'My $string'))
+print(levenshtein.distance('My string', 'My $string'))
 
-    public static void main (String[] args) {
-        Levenshtein l = new Levenshtein();
+```  
 
-        System.out.println(l.distance("My string", "My $tring"));
-        System.out.println(l.distance("My string", "My $tring"));
-        System.out.println(l.distance("My string", "My $tring"));
-    }
-}
-```
 
 ## Normalized Levenshtein
 This distance is computed as levenshtein distance divided by the length of the longest string. The resulting value is always in the interval [0.0 1.0] but it is not a metric anymore!
 
 The similarity is computed as 1 - normalized distance.
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.normalized_levenshtein import NormalizedLevenshtein
 
-public class MyApp {
+normalized_levenshtein = NormalizedLevenshtein()
+print(normalized_levenshtein.distance('My string', 'My $string'))
+print(normalized_levenshtein.distance('My string', 'My $string'))
+print(normalized_levenshtein.distance('My string', 'My $string'))
 
-    public static void main (String[] args) {
-        NormalizedLevenshtein l = new NormalizedLevenshtein();
+print(normalized_levenshtein.similarity('My string', 'My $string'))
+print(normalized_levenshtein.similarity('My string', 'My $string'))
+print(normalized_levenshtein.similarity('My string', 'My $string'))
 
-        System.out.println(l.distance("My string", "My $tring"));
-        System.out.println(l.distance("My string", "My $tring"));
-        System.out.println(l.distance("My string", "My $tring"));
-    }
-}
-```
+```  
 
 ## Weighted Levenshtein
 An implementation of Levenshtein that allows to define different weights for different character substitutions.
@@ -130,32 +123,19 @@ This algorithm is usually used for optical character recognition (OCR) applicati
 
 It can also be used for keyboard typing auto-correction. Here the cost of substituting E and R is lower for example because these are located next to each other on an AZERTY or QWERTY keyboard. Hence the probability that the user mistyped the characters is higher.
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.weighted_levenshtein import WeightedLevenshtein
+from similarity.weighted_levenshtein import CharacterSubstitutionInterface
 
-public class MyApp {
+class CharacterSubstitution(CharacterSubstitutionInterface):
+    def cost(self, c0, c1):
+        if c0=='t' and c1=='r':
+            return 0.5
+        return 1.0
 
-    public static void main(String[] args) {
-        WeightedLevenshtein wl = new WeightedLevenshtein(
-                new CharacterSubstitutionInterface() {
-                    public double cost(char c1, char c2) {
+weighted_levenshtein = WeightedLevenshtein(CharacterSubstitution())
+print(weighted_levenshtein.distance('String1', 'String2'))
 
-                        // The cost for substituting 't' and 'r' is considered
-                        // smaller as these 2 are located next to each other
-                        // on a keyboard
-                        if (c1 == 't' && c2 == 'r') {
-                            return 0.5;
-                        }
-
-                        // For most cases, the cost of substituting 2 characters
-                        // is 1.0
-                        return 1.0;
-                    }
-        });
-
-        System.out.println(wl.distance("String1", "Srring2"));
-    }
-}
 ```
 
 ## Damerau-Levenshtein
@@ -165,30 +145,17 @@ It does respect triangle inequality, and is thus a metric distance.
 
 This is not to be confused with the optimal string alignment distance, which is an extension where no substring can be edited more than once.
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.damerau import Damerau
 
-public class MyApp {
+damerau = Damerau()
+print(damerau.distance('ABCDEF', 'ABDCEF'))
+print(damerau.distance('ABCDEF', 'BACDFE'))
+print(damerau.distance('ABCDEF', 'ABCDE'))
+print(damerau.distance('ABCDEF', 'BCDEF'))
+print(damerau.distance('ABCDEF', 'ABCGDEF'))
+print(damerau.distance('ABCDEF', 'POIU'))
 
-
-    public static void main(String[] args) {
-        Damerau d = new Damerau();
-
-        // 1 substitution
-        System.out.println(d.distance("ABCDEF", "ABDCEF"));
-
-        // 2 substitutions
-        System.out.println(d.distance("ABCDEF", "BACDFE"));
-
-        // 1 deletion
-        System.out.println(d.distance("ABCDEF", "ABCDE"));
-        System.out.println(d.distance("ABCDEF", "BCDEF"));
-        System.out.println(d.distance("ABCDEF", "ABCGDEF"));
-
-        // All different
-        System.out.println(d.distance("ABCDEF", "POIU"));
-    }
-}
 ```
 
 Will produce:
@@ -208,18 +175,12 @@ The difference from the algorithm for Levenshtein distance is the addition of on
 
 Note that for the optimal string alignment distance, the triangle inequality does not hold and so it is not a true metric.
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.optimal_string_alignment import OptimalStringAlignment
 
-public class MyApp {
+optimal_string_alignment = OptimalStringAlignment()
+print(optimal_string_alignment.distance('CA', 'ABC'))
 
-
-    public static void main(String[] args) {
-        OptimalStringAlignment osa = new OptimalStringAlignment();
-
-        System.out.println(osa.distance("CA", "ABC"));;
-    }
-}
 ```
 
 Will produce:
@@ -236,29 +197,20 @@ It is (roughly) a variation of Damerau-Levenshtein, where the substitution of 2 
 
 The distance is computed as 1 - Jaro-Winkler similarity.
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.jarowinkler import JaroWinkler
 
-public class MyApp {
+jarowinkler = JaroWinkler()
+print(jarowinkler.similarity('My string', 'My tsring'))
+print(jarowinkler.similarity('My string', 'My ntrisg'))
 
-
-    public static void main(String[] args) {
-        JaroWinkler jw = new JaroWinkler();
-
-        // substitution of s and t
-        System.out.println(jw.similarity("My string", "My tsring"));
-
-        // substitution of s and n
-        System.out.println(jw.similarity("My string", "My ntrisg"));
-    }
-}
 ```
 
 will produce:
 
 ```
-0.9740740656852722
-0.8962963223457336
+0.9740740740740741
+0.8962962962962963
 ```
 
 ## Longest Common Subsequence
@@ -277,49 +229,49 @@ This class implements the dynamic programming approach, which has a space requir
 
 In "Length of Maximal Common Subsequences", K.S. Larsen proposed an algorithm that computes the length of LCS in time O(log(m).log(n)). But the algorithm has a memory requirement O(m.n²) and was thus not implemented here.
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.longest_common_subsequence import LongestCommonSubsequence
 
-public class MyApp {
-    public static void main(String[] args) {
-        LongestCommonSubsequence lcs = new LongestCommonSubsequence();
+lcs = LongestCommonSubsequence()
+# Will produce 4.0
+print(lcs.distance('AGCAT', 'GAC'))
+# Will produce 1.0
+print(lcs.distance('AGCAT', 'AGCT'))
 
-        // Will produce 4.0
-        System.out.println(lcs.distance("AGCAT", "GAC"));
-
-        // Will produce 1.0
-        System.out.println(lcs.distance("AGCAT", "AGCT"));
-    }
-}
 ```
 
 ## Metric Longest Common Subsequence
 Distance metric based on Longest Common Subsequence, from the notes "An LCS-based string metric" by Daniel Bakkelund.
 http://heim.ifi.uio.no/~danielry/StringMetric.pdf
 
-The distance is computed as 1 - |LCS(s1, s2)| / max(|s1|, |s2|)
-```java
-public class MyApp {
+The distance is computed as 1 - |LCS(s1, s2)| / max(|s1|, |s2|)  
 
-        public static void main(String[] args) {
+```python
+from similarity.metric_lcs import MetricLCS
 
-        info.debatty.java.stringsimilarity.MetricLCS lcs =
-                new info.debatty.java.stringsimilarity.MetricLCS();
+metric_lcs = MetricLCS()
+s1 = 'ABCDEFG'
+s2 = 'ABCDEFHJKL'
 
-        String s1 = "ABCDEFG";
-        String s2 = "ABCDEFHJKL";
-        // LCS: ABCDEF => length = 6
-        // longest = s2 => length = 10
-        // => 1 - 6/10 = 0.4
-        System.out.println(lcs.distance(s1, s2));
+# LCS: ABCDEF => length = 6
+# longest = s2 => length = 10
+# => 1 - 6/10 = 0.4
+print(metric_lcs.distance(s1, s2))
 
-        // LCS: ABDF => length = 4
-        // longest = ABDEF => length = 5
-        // => 1 - 4 / 5 = 0.2
-        System.out.println(lcs.distance("ABDEF", "ABDIF"));
-    }
-}
+# LCS: ABDF => length = 4
+# longest = ABDEF => length = 5
+# => 1 - 4 / 5 = 0.2
+print(metric_lcs.distance('ABDEF', 'ABDIF'))
+
+```  
+
+will produce:
+
 ```
+0.4
+0.19999999999999996
+```
+
 
 ## N-Gram
 
@@ -331,24 +283,17 @@ The algorithm uses affixing with special character '\n' to increase the weight o
 
 In the paper, Kondrak also defines a similarity measure, which is not implemented (yet).
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.ngram import NGram
 
-public class MyApp {
+twogram = NGram(2)
+print(twogram.distance('ABCD', 'ABTUIO'))
 
-    public static void main(String[] args) {
+s1 = 'Adobe CreativeSuite 5 Master Collection from cheap 4zp'
+s2 = 'Adobe CreativeSuite 5 Master Collection from cheap d1x'
+fourgram = NGram(4)
+print(fourgram.distance(s1, s2))
 
-        // produces 0.416666
-        NGram twogram = new NGram(2);
-        System.out.println(twogram.distance("ABCD", "ABTUIO"));
-
-        // produces 0.97222
-        String s1 = "Adobe CreativeSuite 5 Master Collection from cheap 4zp";
-        String s2 = "Adobe CreativeSuite 5 Master Collection from cheap d1x";
-        NGram ngram = new NGram(4);
-        System.out.println(ngram.distance(s1, s2));
-    }
-}
 ```
 
 ## Shingle (n-gram) based algorithms
@@ -358,51 +303,26 @@ The cost for computing these similarities and distances is mainly domnitated by 
 
 Directly compute the distance between strings:
 
-```java
-import info.debatty.java.stringsimilarity.*;
+```python
+from similarity.qgram import QGram
 
-public class MyApp {
+qgram = QGram(2)
+print(qgram.distance('ABCD', 'ABCE'))
 
-    public static void main(String[] args) {
-        QGram dig = new QGram(2);
-
-        // AB BC CD CE
-        // 1  1  1  0
-        // 1  1  0  1
-        // Total: 2
-
-        System.out.println(dig.distance("ABCD", "ABCE"));
-    }
-}
-```
+```  
 
 Or, for large datasets, pre-compute the profile of all strings. The similarity can then be computed between profiles:
 
-```java
-import info.debatty.java.stringsimilarity.KShingling;
-import info.debatty.java.stringsimilarity.StringProfile;
+```python
+from similarity.cosine import Cosine
 
+cosine = Cosine(2)
+s0 = 'My first string'
+s1 = 'My other string...'
+p0 = cosine.get_profile(s0)
+p1 = cosine.get_profile(s1)
+print(cosine.similarity_profiles(p0, p1))
 
-/**
- * Example of computing cosine similarity with pre-computed profiles.
- */
-public class PrecomputedCosine {
-
-    public static void main(String[] args) throws Exception {
-        String s1 = "My first string";
-        String s2 = "My other string...";
-
-        // Let's work with sequences of 2 characters...
-        Cosine cosine = new Cosine(2);
-
-        // Pre-compute the profile of strings
-        Map<String, Integer> profile1 = cosine.getProfile(s1);
-        Map<String, Integer> profile2 = cosine.getProfile(s2);
-
-        // Prints 0.516185
-        System.out.println(cosine.similarity(profile1, profile2));
-    }
-}
 ```
 
 Pay attention, this only works if the same KShingling object is used to parse all input strings !
@@ -436,22 +356,7 @@ Distance is computed as 1 - similarity.
 ### SIFT4
 SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and Longest Common Subsequence. It was developed to produce a distance measure that matches as close as possible to the human perception of string distance. Hence it takes into account elements like character substitution, character distance, longest common subsequence etc. It was developed using experimental testing, and without theoretical background.
 
-```
-import info.debatty.java.stringsimilarity.experimental.Sift4;
-
-public class MyApp {
-
-    public static void main(String[] args) {
-        String s1 = "This is the first string";
-        String s2 = "And this is another string";
-        Sift4 sift4 = new Sift4();
-        sift4.setMaxOffset(5);
-        double expResult =  11.0;
-        double result = sift4.distance(s1, s2);
-        assertEquals(expResult, result, 0.0);
-    }
-}
-```
+**Not implemented yet**
 
 
 
