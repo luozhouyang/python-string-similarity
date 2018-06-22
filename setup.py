@@ -14,7 +14,7 @@ setuptools.setup(
     author_email="stupidme.me.lzy@gmail.com",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=["numpy>=1.14.3"],
+    install_requires=["numpy>=1.12.0"],
     license="MIT License",
     classifiers=(
         "Programming Language :: Python :: 3",
