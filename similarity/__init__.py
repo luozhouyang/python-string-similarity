@@ -1,0 +1,1 @@
+__name__ = 'pystrsim'

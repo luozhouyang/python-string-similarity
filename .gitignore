@@ -3,3 +3,6 @@
 __pycache__/
 similarity/__pycache__/
 venv/
+build/
+dist/
+pystrsim.egg-info/
