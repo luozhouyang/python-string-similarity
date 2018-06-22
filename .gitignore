@@ -6,3 +6,4 @@ venv/
 build/
 dist/
 pystrsim.egg-info/
+strsim.egg-info/

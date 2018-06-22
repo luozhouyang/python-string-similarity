@@ -32,7 +32,7 @@ A library implementing different string similarity and distance measures. A doze
 From pypi:
 
 ```bash
-pip install pystrsim
+pip install strsim
 ```
 
 or clone this repository:
