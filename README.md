@@ -29,6 +29,14 @@ A library implementing different string similarity and distance measures. A doze
 
 ## Download
 
+From pypi:
+
+```bash
+pip install pystrsim
+```
+
+or clone this repository:
+
 ```bash
 git clone https://github.com/luozhouyang/python-string-similarity
 cd python-string-similarity
