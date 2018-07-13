@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="strsim",
-    version="0.0.1",
+    version="0.0.2",
     description="A library implementing different string similarity and distance measures",
     long_description=long_description,
     long_description_content_type="text/markdown",
