@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="strsim",
-    version="0.0.2",
+    version="0.0.3",
     description="A library implementing different string similarity and distance measures",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -14,7 +14,7 @@ setuptools.setup(
     author_email="stupidme.me.lzy@gmail.com",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=["numpy>=1.12.0"],
+    install_requires=[],
     license="MIT License",
     classifiers=(
         "Programming Language :: Python :: 3",
