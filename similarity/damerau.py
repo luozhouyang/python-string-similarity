@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import numpy as np
-
 from .string_distance import MetricStringDistance
 
 
@@ -38,7 +36,7 @@ class Damerau(MetricStringDistance):
             da[s0[i]] = str(0)
         for i in range(len(s1)):
             da[s1[i]] = str(0)
-        h = np.zeros((len(s0) + 2, len(s1) + 2))
+        h = [[0] * (len(s1) + 2) for _ in range(len(s0) + 2)]
         for i in range(len(s0) + 1):
             h[i + 1][0] = inf
             h[i + 1][1] = i
