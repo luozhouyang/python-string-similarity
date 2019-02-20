@@ -24,9 +24,6 @@ from .shingle_based import ShingleBased
 from .string_distance import NormalizedStringDistance
 from .string_similarity import NormalizedStringSimilarity
 
-import re
-_SPACE_PATTERN = re.compile("\\s+")
-
 
 class Cosine(ShingleBased, NormalizedStringDistance,
              NormalizedStringSimilarity):
@@ -44,10 +41,6 @@ class Cosine(ShingleBased, NormalizedStringDistance,
             raise TypeError("Argument s1 is NoneType.")
         if s0 == s1:
             return 1.0
-            
-        s0 = _SPACE_PATTERN.sub("", s0)
-        s1 = _SPACE_PATTERN.sub("", s1)
-        
         if len(s0) < self.get_k() or len(s1) < self.get_k():
             return 0.0
         profile0 = self.get_profile(s0)
