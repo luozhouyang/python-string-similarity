@@ -33,7 +33,7 @@ class ShingleBased:
 
     def get_profile(self, string):
         shingles = dict()
-        no_space_str = _SPACE_PATTERN.sub("", string)
+        no_space_str = _SPACE_PATTERN.sub(" ", string)
         for i in range(len(no_space_str) - self.k + 1):
             shingle = no_space_str[i:i + self.k]
             old = shingles.get(shingle)
