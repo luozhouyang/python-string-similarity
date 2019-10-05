@@ -18,8 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import numpy as np
-
 from .string_distance import StringDistance
 
 
@@ -42,7 +40,7 @@ class LongestCommonSubsequence(StringDistance):
         s0_len, s1_len = len(s0), len(s1)
         x, y = s0[:], s1[:]
         n, m = s0_len + 1, s1_len + 1
-        matrix = np.zeros((n, m))
+        matrix = [[0] * m for _ in range(n)]
         for i in range(1, s0_len + 1):
             for j in range(1, s1_len + 1):
                 if x[i - 1] == y[j - 1]:
