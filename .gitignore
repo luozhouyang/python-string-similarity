@@ -1,7 +1,6 @@
 .idea/
 .vscode/
 __pycache__/
-similarity/__pycache__/
 venv/
 build/
 dist/

@@ -20,19 +20,19 @@
 
 import unittest
 
-from .jarowinkler import JaroWinkler
+from .normalized_levenshtein import NormalizedLevenshtein
 
 
-class TestJaroWinkler(unittest.TestCase):
+class TestNormalizedLevenshtein(unittest.TestCase):
 
-    def test_jarowinkler(self):
-        a = JaroWinkler()
+    def test_normalized_levenshtein(self):
+        a = NormalizedLevenshtein()
         s0 = ""
         s1 = ""
         s2 = "上海"
         s3 = "上海市"
         distance_format = "distance: {:.4}\t between {} and {}"
-        similarity_format = "similarity: {:.4}\t between {} and {}"
+        similarity_format = "strsim: {:.4}\t between {} and {}"
         print(distance_format.format(str(a.distance(s0, s1)), s0, s1))
         print(distance_format.format(str(a.distance(s0, s2)), s0, s2))
         print(distance_format.format(str(a.distance(s0, s3)), s0, s3))
