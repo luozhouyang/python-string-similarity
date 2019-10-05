@@ -214,7 +214,7 @@ It is (roughly) a variation of Damerau-Levenshtein, where the substitution of 2 
 The distance is computed as 1 - Jaro-Winkler similarity.
 
 ```python
-from strsim.jarowinkler import JaroWinkler
+from strsim.jaro_winkler import JaroWinkler
 
 jarowinkler = JaroWinkler()
 print(jarowinkler.similarity('My string', 'My tsring'))

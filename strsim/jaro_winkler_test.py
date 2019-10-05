@@ -20,7 +20,7 @@
 
 import unittest
 
-from .jarowinkler import JaroWinkler
+from .jaro_winkler import JaroWinkler
 
 
 class TestJaroWinkler(unittest.TestCase):

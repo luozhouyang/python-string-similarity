@@ -22,7 +22,7 @@ from enum import IntEnum
 from .cosine import Cosine
 from .damerau import Damerau
 from .jaccard import Jaccard
-from .jarowinkler import JaroWinkler
+from .jaro_winkler import JaroWinkler
 from .levenshtein import Levenshtein
 from .longest_common_subsequence import LongestCommonSubsequence
 from .metric_lcs import MetricLCS
