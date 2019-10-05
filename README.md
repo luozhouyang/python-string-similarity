@@ -32,15 +32,7 @@ A library implementing different string similarity and distance measures. A doze
 From pypi:
 
 ```bash
-pip install strsim
-```
-
-or clone this repository:
-
-```bash
-git clone https://github.com/luozhouyang/python-string-similarity
-cd python-string-similarity
-pip install -r requirements.txt
+pip install strsimpy
 ```
 
 ## Overview
@@ -103,7 +95,7 @@ The Levenshtein distance between two words is the minimum number of single-chara
 It is a metric string distance. This implementation uses dynamic programming (Wagner–Fischer algorithm), with only 2 rows of data. The space requirement is thus O(m) and the algorithm runs in O(m.n).
 
 ```python
-from strsim.levenshtein import Levenshtein
+from strsimpy.levenshtein import Levenshtein
 
 levenshtein = Levenshtein()
 print(levenshtein.distance('My string', 'My $string'))
@@ -119,7 +111,7 @@ This distance is computed as levenshtein distance divided by the length of the l
 The similarity is computed as 1 - normalized distance.
 
 ```python
-from strsim.normalized_levenshtein import NormalizedLevenshtein
+from strsimpy.normalized_levenshtein import NormalizedLevenshtein
 
 normalized_levenshtein = NormalizedLevenshtein()
 print(normalized_levenshtein.distance('My string', 'My $string'))
@@ -140,8 +132,8 @@ This algorithm is usually used for optical character recognition (OCR) applicati
 It can also be used for keyboard typing auto-correction. Here the cost of substituting E and R is lower for example because these are located next to each other on an AZERTY or QWERTY keyboard. Hence the probability that the user mistyped the characters is higher.
 
 ```python
-from strsim.weighted_levenshtein import WeightedLevenshtein
-from strsim.weighted_levenshtein import CharacterSubstitutionInterface
+from strsimpy.weighted_levenshtein import WeightedLevenshtein
+from strsimpy.weighted_levenshtein import CharacterSubstitutionInterface
 
 class CharacterSubstitution(CharacterSubstitutionInterface):
     def cost(self, c0, c1):
@@ -162,7 +154,7 @@ It does respect triangle inequality, and is thus a metric distance.
 This is not to be confused with the optimal string alignment distance, which is an extension where no substring can be edited more than once.
 
 ```python
-from strsim.damerau import Damerau
+from strsimpy.damerau import Damerau
 
 damerau = Damerau()
 print(damerau.distance('ABCDEF', 'ABDCEF'))
@@ -192,7 +184,7 @@ The difference from the algorithm for Levenshtein distance is the addition of on
 Note that for the optimal string alignment distance, the triangle inequality does not hold and so it is not a true metric.
 
 ```python
-from strsim.optimal_string_alignment import OptimalStringAlignment
+from strsimpy.optimal_string_alignment import OptimalStringAlignment
 
 optimal_string_alignment = OptimalStringAlignment()
 print(optimal_string_alignment.distance('CA', 'ABC'))
@@ -214,7 +206,7 @@ It is (roughly) a variation of Damerau-Levenshtein, where the substitution of 2 
 The distance is computed as 1 - Jaro-Winkler similarity.
 
 ```python
-from strsim.jaro_winkler import JaroWinkler
+from strsimpy.jaro_winkler import JaroWinkler
 
 jarowinkler = JaroWinkler()
 print(jarowinkler.similarity('My string', 'My tsring'))
@@ -246,7 +238,7 @@ This class implements the dynamic programming approach, which has a space requir
 In "Length of Maximal Common Subsequences", K.S. Larsen proposed an algorithm that computes the length of LCS in time O(log(m).log(n)). But the algorithm has a memory requirement O(m.n²) and was thus not implemented here.
 
 ```python
-from strsim.longest_common_subsequence import LongestCommonSubsequence
+from strsimpy.longest_common_subsequence import LongestCommonSubsequence
 
 lcs = LongestCommonSubsequence()
 # Will produce 4.0
@@ -263,7 +255,7 @@ http://heim.ifi.uio.no/~danielry/StringMetric.pdf
 The distance is computed as 1 - |LCS(s1, s2)| / max(|s1|, |s2|)  
 
 ```python
-from strsim.metric_lcs import MetricLCS
+from strsimpy.metric_lcs import MetricLCS
 
 metric_lcs = MetricLCS()
 s1 = 'ABCDEFG'
@@ -300,7 +292,7 @@ The algorithm uses affixing with special character '\n' to increase the weight o
 In the paper, Kondrak also defines a similarity measure, which is not implemented (yet).
 
 ```python
-from strsim.ngram import NGram
+from strsimpy.ngram import NGram
 
 twogram = NGram(2)
 print(twogram.distance('ABCD', 'ABTUIO'))
@@ -320,7 +312,7 @@ The cost for computing these similarities and distances is mainly domnitated by 
 Directly compute the distance between strings:
 
 ```python
-from strsim.qgram import QGram
+from strsimpy.qgram import QGram
 
 qgram = QGram(2)
 print(qgram.distance('ABCD', 'ABCE'))
@@ -330,7 +322,7 @@ print(qgram.distance('ABCD', 'ABCE'))
 Or, for large datasets, pre-compute the profile of all strings. The similarity can then be computed between profiles:
 
 ```python
-from strsim.cosine import Cosine
+from strsimpy.cosine import Cosine
 
 cosine = Cosine(2)
 s0 = 'My first string'
