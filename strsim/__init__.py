@@ -35,4 +35,5 @@ from .string_distance import StringDistance
 from .string_similarity import StringSimilarity
 from .weighted_levenshtein import WeightedLevenshtein
 
-__name__ = 'strsim'
+__name__ = 'strsimpy'
+__version__ = '0.1.0'

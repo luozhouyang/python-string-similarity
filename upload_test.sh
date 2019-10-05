@@ -2,7 +2,7 @@
 
 conda activate strsim
 python3 setup.py sdist bdist_wheel
-twine upload dist/*
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 rm -rf build
 rm -rf dist

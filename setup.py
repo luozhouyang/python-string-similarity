@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="strsim",
-    version="0.0.3",
+    name="strsimpy",
+    version="0.1.0",
     description="A library implementing different string similarity and distance measures",
     long_description=long_description,
     long_description_content_type="text/markdown",
