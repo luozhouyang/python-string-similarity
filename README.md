@@ -304,6 +304,19 @@ print(fourgram.distance(s1, s2))
 
 ```
 
+## Gensim
+Gensim is billed as a Natural Language Processing package that does ‘Topic Modeling for Humans’. But its practically much more than that.
+
+If you are unfamiliar with topic modeling, it is a technique to extract the underlying topics from large volumes of text. Gensim provides algorithms like LDA and LSI (which we will see later in this post) and the necessary sophistication to build high-quality topic models.
+
+You may argue that topic models and word embedding are available in other packages like scikit, R etc. But the width and scope of facilities to build and evaluate topic models are unparalleled in gensim, plus many more convenient facilities for text processing.
+
+It is a great package for processing texts, working with word vector models (such as Word2Vec, FastText etc) and for building topic models.
+
+Also, another significant advantage with gensim is: it lets you handle large text files without having to load the entire file in memory
+
+Gensim Tutorial – A Complete Beginners Guide: https://www.machinelearningplus.com/nlp/gensim-tutorial/
+
 ## Shingle (n-gram) based algorithms
 A few algorithms work by converting strings into sets of n-grams (sequences of n characters, also sometimes called k-shingles). The similarity or distance between the strings is then the similarity or distance between the sets.
 
@@ -365,8 +378,6 @@ Distance is computed as 1 - similarity.
 SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and Longest Common Subsequence. It was developed to produce a distance measure that matches as close as possible to the human perception of string distance. Hence it takes into account elements like character substitution, character distance, longest common subsequence etc. It was developed using experimental testing, and without theoretical background.
 
 **Not implemented yet**
-
-
 
 ## Users
 * [StringSimilarity.NET](https://github.com/feature23/StringSimilarity.NET) a .NET port of java-string-similarity
