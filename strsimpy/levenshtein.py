@@ -33,7 +33,7 @@ class Levenshtein(MetricStringDistance):
         if len(s0) == 0:
             return len(s1)
         if len(s1) == 0:
-            return len(s1)
+            return len(s0)
 
         v0 = [0] * (len(s1) + 1)
         v1 = [0] * (len(s1) + 1)
