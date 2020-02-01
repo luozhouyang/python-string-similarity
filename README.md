@@ -32,6 +32,7 @@ A library implementing different string similarity and distance measures. A doze
 From pypi:
 
 ```bash
+# pip install strsim # deprecated, do not use this!
 pip install strsimpy
 ```
 
