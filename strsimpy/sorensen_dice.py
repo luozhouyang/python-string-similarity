@@ -44,8 +44,5 @@ class SorensenDice(ShingleBased, NormalizedStringDistance, NormalizedStringSimil
             union.add(k)
         for k in profile1.keys():
             union.add(k)
-        inter = 0
-        for k in union:
-            if k in profile0.keys() and k in profile1.keys():
-                inter += 1
+        inter = int(len(profile0.keys()) + len(profile1.keys()) - len(union))
         return 2.0 * inter / (len(profile0) + len(profile1))
