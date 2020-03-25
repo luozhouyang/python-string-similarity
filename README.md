@@ -4,27 +4,31 @@
 
 A library implementing different string similarity and distance measures. A dozen of algorithms (including Levenshtein edit distance and sibblings, Jaro-Winkler, Longest Common Subsequence, cosine similarity etc.) are currently implemented. Check the summary table below for the complete list...
 
-* [Download](#download)
-* [Overview](#overview)
-* [Normalized, metric, similarity and distance](#normalized-metric-similarity-and-distance)
-* [Shingles (n-gram) based similarity and distance](#shingles-n-gram-based-similarity-and-distance)
-* [Levenshtein](#levenshtein)
-* [Normalized Levenshtein](#normalized-levenshtein)
-* [Weighted Levenshtein](#weighted-levenshtein)
-* [Damerau-Levenshtein](#damerau-levenshtein)
-* [Optimal String Alignment](#optimal-string-alignment)
-* [Jaro-Winkler](#jaro-winkler)
-* [Longest Common Subsequence](#longest-common-subsequence)
-* [Metric Longest Common Subsequence](#metric-longest-common-subsequence)
-* [N-Gram](#n-gram)
-* [Shingle (n-gram) based algorithms](#shingle-n-gram-based-algorithms)
-  * [Q-Gram](#shingle-n-gram-based-algorithms)
-  * [Cosine similarity](#shingle-n-gram-based-algorithms)
-  * [Jaccard index](#shingle-n-gram-based-algorithms)
-  * [Sorensen-Dice coefficient](#shingle-n-gram-based-algorithms)
-* [Experimental](#experimental)
-  * [SIFT4](#sift4)
-* [Users](#users)
+- [python-string-similarity](#python-string-similarity)
+  - [Download](#download)
+  - [Overview](#overview)
+  - [Normalized, metric, similarity and distance](#normalized-metric-similarity-and-distance)
+    - [(Normalized) similarity and distance](#normalized-similarity-and-distance)
+    - [Metric distances](#metric-distances)
+  - [Shingles (n-gram) based similarity and distance](#shingles-n-gram-based-similarity-and-distance)
+  - [Levenshtein](#levenshtein)
+  - [Normalized Levenshtein](#normalized-levenshtein)
+  - [Weighted Levenshtein](#weighted-levenshtein)
+  - [Damerau-Levenshtein](#damerau-levenshtein)
+  - [Optimal String Alignment](#optimal-string-alignment)
+  - [Jaro-Winkler](#jaro-winkler)
+  - [Longest Common Subsequence](#longest-common-subsequence)
+  - [Metric Longest Common Subsequence](#metric-longest-common-subsequence)
+  - [N-Gram](#n-gram)
+  - [Shingle (n-gram) based algorithms](#shingle-n-gram-based-algorithms)
+    - [Q-Gram](#q-gram)
+    - [Cosine similarity](#cosine-similarity)
+    - [Jaccard index](#jaccard-index)
+    - [Sorensen-Dice coefficient](#sorensen-dice-coefficient)
+    - [Overlap coefficient (i.e., Szymkiewicz-Simpson)](#overlap-coefficient-ie-szymkiewicz-simpson)
+  - [Experimental](#experimental)
+    - [SIFT4](#sift4)
+  - [Users](#users)
 
 
 ## Download
@@ -55,6 +59,7 @@ The main characteristics of each implemented algorithm are presented below. The 
 | [Cosine similarity](#cosine-similarity) 				|similarity<br>distance | Yes  			| No  		| Profile | O(m+n) |  |
 | [Jaccard index](#jaccard-index)				|similarity<br>distance | Yes  			| Yes  		| Set	  | O(m+n) |  |
 | [Sorensen-Dice coefficient](#sorensen-dice-coefficient) 	|similarity<br>distance | Yes 			| No 		| Set	  | O(m+n) |  |
+| [Overlap coefficient](#overlap-coefficient-ie-szymkiewicz-simpson) 	|similarity<br>distance | Yes 			| No 		| Set	  | O(m+n) |  |
 
 [1] In this library, Levenshtein edit distance, LCS distance and their sibblings are computed using the **dynamic programming** method, which has a cost O(m.n). For Levenshtein distance, the algorithm is sometimes called **Wagner-Fischer algorithm** ("The string-to-string correction problem", 1974). The original algorithm uses a matrix of size m x n to store the Levenshtein distance between string prefixes.
 
@@ -357,6 +362,11 @@ Jaccard index is a metric distance.
 
 ### Sorensen-Dice coefficient
 Similar to Jaccard index, but this time the similarity is computed as 2 * |V1 inter V2| / (|V1| + |V2|).
+
+Distance is computed as 1 - similarity.
+
+### Overlap coefficient (i.e., Szymkiewicz-Simpson)
+Very similar to Jaccard and Sorensen-Dice measures, but this time the similarity is computed as |V1 inter V2| / Min(|V1|,|V2|). Tends to yield higher similarity scores compared to the other overlapping coefficients. Always returns the highest similarity score (1) if one given string is the subset of the other. 
 
 Distance is computed as 1 - similarity.
 
