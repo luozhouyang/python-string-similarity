@@ -37,7 +37,7 @@ From pypi:
 
 ```bash
 # pip install strsim # deprecated, do not use this!
-pip install strsimpy
+pip install -U strsimpy
 ```
 
 ## Overview
@@ -245,12 +245,15 @@ In "Length of Maximal Common Subsequences", K.S. Larsen proposed an algorithm th
 
 ```python
 from strsimpy.longest_common_subsequence import LongestCommonSubsequence
-
 lcs = LongestCommonSubsequence()
-# Will produce 4.0
 print(lcs.distance('AGCAT', 'GAC'))
-# Will produce 1.0
+4
+print(lcs.length('AGCAT', 'GAC'))
+2
 print(lcs.distance('AGCAT', 'AGCT'))
+1
+print(lcs.length('AGCAT', 'AGCT'))
+4
 
 ```
 
