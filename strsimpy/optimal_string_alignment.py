@@ -18,7 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import numpy as np
 
 from .string_distance import StringDistance
 
@@ -39,7 +38,7 @@ class OptimalStringAlignment(StringDistance):
         if m == 0:
             return 1.0 * m
 
-        d = np.zeros((n + 2, m + 2))
+        d = [[0] * (m+2) for _ in range(n+2)]
         for i in range(n + 1):
             d[i][0] = i
         for j in range(m + 1):
