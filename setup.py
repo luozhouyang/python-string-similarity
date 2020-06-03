@@ -11,7 +11,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/luozhouyang/python-string-similarity",
     author="ZhouYang Luo",
-    author_email="stupidme.me.lzy@gmail.com",
+    author_email="zhouyang.luo@gmail.com",
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=[],
