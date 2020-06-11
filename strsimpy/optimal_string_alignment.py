@@ -38,7 +38,7 @@ class OptimalStringAlignment(StringDistance):
         if m == 0:
             return 1.0 * m
 
-        d = [[0] * (m+2) for _ in range(n+2)]
+        d = [[0] * (m + 2) for _ in range(n + 2)]
         for i in range(n + 1):
             d[i][0] = i
         for j in range(m + 1):

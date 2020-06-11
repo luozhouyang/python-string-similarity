@@ -39,7 +39,7 @@ class LongestCommonSubsequence(StringDistance):
             raise TypeError("Argument s1 is NoneType.")
         s0_len, s1_len = len(s0), len(s1)
         x, y = s0[:], s1[:]
-        matrix = [[0] * (s1_len+1) for _ in range(s0_len + 1)]
+        matrix = [[0] * (s1_len + 1) for _ in range(s0_len + 1)]
         for i in range(1, s0_len + 1):
             for j in range(1, s1_len + 1):
                 if x[i - 1] == y[j - 1]:

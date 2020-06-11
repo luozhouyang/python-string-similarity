@@ -25,4 +25,4 @@ class OverlapCoefficient(ShingleBased, NormalizedStringDistance, NormalizedStrin
         for k in profile1.keys():
             union.add(k)
         inter = int(len(profile0.keys()) + len(profile1.keys()) - len(union))
-        return inter / min(len(profile0),len(profile1))
+        return inter / min(len(profile0), len(profile1))
