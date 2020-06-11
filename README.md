@@ -1,4 +1,9 @@
 # python-string-similarity
+
+![Python package](https://github.com/luozhouyang/python-string-similarity/workflows/Python%20package/badge.svg)
+[![PyPI version](https://badge.fury.io/py/strsimpy.svg)](https://badge.fury.io/py/strsimpy)
+[![Python](https://img.shields.io/pypi/pyversions/strsimpy.svg?style=plastic)](https://badge.fury.io/py/strsimpy)
+
 **Python3.5 implementation of [tdebatty/java-string-similarity](https://github.com/tdebatty/java-string-similarity)**
 
 
