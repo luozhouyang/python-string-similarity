@@ -4,7 +4,7 @@
 [![PyPI version](https://badge.fury.io/py/strsimpy.svg)](https://badge.fury.io/py/strsimpy)
 [![Python](https://img.shields.io/pypi/pyversions/strsimpy.svg?style=plastic)](https://badge.fury.io/py/strsimpy)
 
-**Python3.5 implementation of [tdebatty/java-string-similarity](https://github.com/tdebatty/java-string-similarity)**
+Python3.x implementation of [tdebatty/java-string-similarity](https://github.com/tdebatty/java-string-similarity)
 
 
 A library implementing different string similarity and distance measures. A dozen of algorithms (including Levenshtein edit distance and sibblings, Jaro-Winkler, Longest Common Subsequence, cosine similarity etc.) are currently implemented. Check the summary table below for the complete list...
