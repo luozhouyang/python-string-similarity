@@ -144,15 +144,25 @@ It can also be used for keyboard typing auto-correction. Here the cost of substi
 
 ```python
 from strsimpy.weighted_levenshtein import WeightedLevenshtein
-from strsimpy.weighted_levenshtein import CharacterSubstitutionInterface
 
-class CharacterSubstitution(CharacterSubstitutionInterface):
-    def cost(self, c0, c1):
-        if c0=='t' and c1=='r':
-            return 0.5
-        return 1.0
 
-weighted_levenshtein = WeightedLevenshtein(CharacterSubstitution())
+def insertion_cost(char):
+    return 1.0
+
+
+def deletion_cost(char):
+    return 1.0
+
+
+def substitution_cost(char_a, char_b):
+    if char_a == 't' and char_b == 'r':
+        return 0.5
+    return 1.0
+
+weighted_levenshtein = WeightedLevenshtein(
+    substitution_cost_fn=substitution_cost,
+    insertion_cost_fn=insertion_cost,
+    deletion_cost_fn=deletion_cost)
 print(weighted_levenshtein.distance('String1', 'String2'))
 
 ```
