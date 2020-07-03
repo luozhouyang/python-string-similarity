@@ -20,19 +20,13 @@
 
 import unittest
 
-from .weighted_levenshtein import WeightedLevenshtein, CharacterSubstitutionInterface
-
-
-class CharSub(CharacterSubstitutionInterface):
-
-    def cost(self, c0, c1):
-        return 1.0
+from .weighted_levenshtein import WeightedLevenshtein
 
 
 class TestWeightedLevenshtein(unittest.TestCase):
 
     def test_weighted_levenshtein(self):
-        a = WeightedLevenshtein(character_substitution=CharSub())
+        a = WeightedLevenshtein()
         s0 = ""
         s1 = ""
         s2 = "上海"
