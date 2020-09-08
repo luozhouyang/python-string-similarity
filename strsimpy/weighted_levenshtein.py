@@ -63,16 +63,16 @@ class WeightedLevenshtein(StringDistance):
             v0[i] = v0[i - 1] + self.insertion_cost_fn(s1[i - 1])
 
         for i in range(len(s0)):
-            s1i = s0[i]
-            deletion_cost = self.deletion_cost_fn(s1i)
+            s0i = s0[i]
+            deletion_cost = self.deletion_cost_fn(s0i)
             v1[0] = v0[0] + deletion_cost
 
             for j in range(len(s1)):
-                s2j = s1[j]
+                s1j = s1[j]
                 cost = 0
-                if s1i != s2j:
-                    cost = self.substitution_cost_fn(s1i, s2j)
-                insertion_cost = self.insertion_cost_fn(s2j)
+                if s0i != s1j:
+                    cost = self.substitution_cost_fn(s0i, s1j)
+                insertion_cost = self.insertion_cost_fn(s1j)
                 v1[j + 1] = min(v1[j] + insertion_cost, v0[j + 1] + deletion_cost, v0[j] + cost)
             v0, v1 = v1, v0
 
