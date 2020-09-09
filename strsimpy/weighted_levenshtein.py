@@ -18,6 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from functools import reduce
 from .string_distance import StringDistance
 
 
@@ -52,9 +53,9 @@ class WeightedLevenshtein(StringDistance):
         if s0 == s1:
             return 0.0
         if len(s0) == 0:
-            return len(s1)
+            return reduce(lambda cost, char: cost + self.insertion_cost_fn(char), s1, 0)
         if len(s1) == 0:
-            return len(s0)
+            return reduce(lambda cost, char: cost + self.deletion_cost_fn(char), s0, 0)
 
         v0, v1 = [0.0] * (len(s1) + 1), [0.0] * (len(s1) + 1)
 
