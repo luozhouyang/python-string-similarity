@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="strsimpy",
-    version="0.1.7",
+    version="0.1.8",
     description="A library implementing different string similarity and distance measures",
     long_description=long_description,
     long_description_content_type="text/markdown",

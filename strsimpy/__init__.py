@@ -36,4 +36,4 @@ from .string_similarity import StringSimilarity
 from .weighted_levenshtein import WeightedLevenshtein
 
 __name__ = 'strsimpy'
-__version__ = '0.1.7'
+__version__ = '0.1.8'
