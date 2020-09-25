@@ -34,7 +34,7 @@ from .sorensen_dice import SorensenDice
 from .string_distance import StringDistance
 from .string_similarity import StringSimilarity
 from .weighted_levenshtein import WeightedLevenshtein
-from .sift4 import SIFT4
+from .sift4 import SIFT4Options, SIFT4
 
 __name__ = 'strsimpy'
 __version__ = '0.1.9'

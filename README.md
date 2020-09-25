@@ -393,7 +393,16 @@ Distance is computed as 1 - similarity.
 ### SIFT4
 SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and Longest Common Subsequence. It was developed to produce a distance measure that matches as close as possible to the human perception of string distance. Hence it takes into account elements like character substitution, character distance, longest common subsequence etc. It was developed using experimental testing, and without theoretical background.
 
+```python
+from strsimpy import SIFT4
 
+s = SIFT4()
+
+# result: 11.0
+s.distance('This is the first string', 'And this is another string') # 11.0
+# result: 12.0
+s.distance('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Amet Lorm ispum dolor sit amet, consetetur adixxxpiscing elit.', maxoffset=10)
+```
 
 ## Users
 * [StringSimilarity.NET](https://github.com/feature23/StringSimilarity.NET) a .NET port of java-string-similarity
