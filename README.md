@@ -393,8 +393,6 @@ Distance is computed as 1 - similarity.
 ### SIFT4
 SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and Longest Common Subsequence. It was developed to produce a distance measure that matches as close as possible to the human perception of string distance. Hence it takes into account elements like character substitution, character distance, longest common subsequence etc. It was developed using experimental testing, and without theoretical background.
 
-**Not implemented yet**
-
 
 
 ## Users
