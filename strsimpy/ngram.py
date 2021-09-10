@@ -46,7 +46,7 @@ class NGram(NormalizedStringDistance):
             for i in range(min(sl, tl)):
                 if s0[i] == s1[i]:
                     cost += 1
-            return 1.0 * cost / max(sl, tl)
+            return 1.0 - cost / max(sl, tl)
 
         sa = [''] * (sl + self.n - 1)
 
