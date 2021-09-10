@@ -37,4 +37,4 @@ from .weighted_levenshtein import WeightedLevenshtein
 from .sift4 import SIFT4Options, SIFT4
 
 __name__ = 'strsimpy'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
