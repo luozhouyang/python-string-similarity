@@ -14,7 +14,7 @@ class SIFT4Test(unittest.TestCase):
         ]
 
         for a, b, offset, res in results:
-            self.assertEquals(res, s.distance(a, b, maxoffset=offset))
+            self.assertEqual(res, s.distance(a, b, maxoffset=offset))
 
 
 if __name__ == "__main__":
