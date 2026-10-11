@@ -372,6 +372,9 @@ The similarity between the two strings is the cosine of the angle between these 
 
 Distance is computed as 1 - cosine similarity.
 
+If either profile has zero norm (for example, whitespace normalization leaves no
+shingles), the similarity is 0. Identical input strings still have similarity 1.
+
 ### Jaccard index
 Like Q-Gram distance, the input strings are first converted into sets of n-grams (sequences of n characters, also called k-shingles), but this time the cardinality of each n-gram is not taken into account. Each input string is simply a set of n-grams. The Jaccard index is then computed as |V1 inter V2| / |V1 union V2|.
 
