@@ -35,7 +35,7 @@ class SIFT4Options(MetricStringDistance):
                 'wordsplit': self.wordsplittokenizer,
                 'characterfrequency': self.characterfrequencytokenizer
             },
-            'tokematcher': {'sift4tokenmatcher': self.sift4tokenmatcher},
+            'tokenmatcher': {'sift4tokenmatcher': self.sift4tokenmatcher},
             'matchingevaluator': {'sift4matchingevaluator': self.sift4matchingevaluator},
             'locallengthevaluator': {
                 'rewardlengthevaluator': self.rewardlengthevaluator,

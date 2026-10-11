@@ -1,9 +1,25 @@
 import unittest
 
-from .sift4 import SIFT4
+from .sift4 import SIFT4, SIFT4Options
 
 
 class SIFT4Test(unittest.TestCase):
+
+    def test_named_token_matcher(self):
+        strings = ('hello world', 'hallo world')
+        named = {'tokenizer': 'wordsplit', 'tokenmatcher': 'sift4tokenmatcher'}
+        callable_option = {
+            'tokenizer': 'wordsplit',
+            'tokenmatcher': SIFT4Options.sift4tokenmatcher,
+        }
+        self.assertEqual(SIFT4().distance(*strings, options=callable_option), 0)
+        self.assertEqual(SIFT4().distance(*strings, options=named), 0)
+        self.assertEqual(SIFT4().distance(
+            'cat dog', 'cat pig', options=named), 1)
+
+    def test_unknown_named_token_matcher(self):
+        with self.assertRaisesRegex(ValueError, 'sift4tokenmatcher'):
+            SIFT4Options({'tokenmatcher': 'unknown'})
 
     def testSIFT4(self):
         s = SIFT4()
