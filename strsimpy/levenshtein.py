@@ -35,19 +35,16 @@ class Levenshtein(MetricStringDistance):
         if len(s1) == 0:
             return len(s0)
 
-        v0 = [0] * (len(s1) + 1)
-        v1 = [0] * (len(s1) + 1)
+        s0_len, s1_len = len(s0), len(s1)
+        v0 = list(range(s1_len + 1))
+        v1 = [0] * (s1_len + 1)
 
-        for i in range(len(v0)):
-            v0[i] = i
-
-        for i in range(len(s0)):
+        for i in range(s0_len):
+            ch0 = s0[i]
             v1[0] = i + 1
-            for j in range(len(s1)):
-                cost = 1
-                if s0[i] == s1[j]:
-                    cost = 0
+            for j in range(s1_len):
+                cost = 0 if ch0 == s1[j] else 1
                 v1[j + 1] = min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost)
             v0, v1 = v1, v0
 
-        return v0[len(s1)]
+        return v0[s1_len]
