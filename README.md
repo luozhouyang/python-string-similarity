@@ -33,6 +33,7 @@ A library implementing different string similarity and distance measures. A doze
     - [Overlap coefficient (i.e., Szymkiewicz-Simpson)](#overlap-coefficient-ie-szymkiewicz-simpson)
   - [Experimental](#experimental)
     - [SIFT4](#sift4)
+  - [Changelog](#changelog)
   - [Users](#users)
 
 
@@ -44,6 +45,21 @@ From pypi:
 # pip install strsim # deprecated, do not use this!
 pip install -U strsimpy
 ```
+
+Supported on Python 3.10+.
+
+All public classes can be imported from the package root:
+
+```python
+from strsimpy import (
+    Levenshtein, NormalizedLevenshtein, WeightedLevenshtein,
+    Damerau, OptimalStringAlignment, JaroWinkler,
+    LongestCommonSubsequence, MetricLCS, NGram,
+    QGram, Cosine, Jaccard, SorensenDice, OverlapCoefficient, SIFT4,
+)
+```
+
+The per-module imports used in the examples below (`from strsimpy.levenshtein import Levenshtein`, etc.) remain supported.
 
 ## Overview
 
@@ -254,7 +270,7 @@ max = n + m
 
 LCS distance is equivalent to Levenshtein distance when only insertion and deletion is allowed (no substitution), or when the cost of the substitution is the double of the cost of an insertion or deletion.
 
-This class implements the dynamic programming approach, which has a space requirement O(m.n), and computation cost O(m.n).
+This class implements the dynamic programming approach with two rolling rows, which has a space requirement O(n) (with n = len(s1)) and computation cost O(m.n).
 
 In "Length of Maximal Common Subsequences", K.S. Larsen proposed an algorithm that computes the length of LCS in time O(log(m).log(n)). But the algorithm has a memory requirement O(m.n²) and was thus not implemented here.
 
@@ -406,6 +422,15 @@ s.distance('This is the first string', 'And this is another string') # 11.0
 # result: 12.0
 s.distance('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Amet Lorm ispum dolor sit amet, consetetur adixxxpiscing elit.', maxoffset=10)
 ```
+
+## Changelog
+
+### 0.3.0
+- Export `JaroWinkler` and `OverlapCoefficient` from the package root, so every public class is importable as `from strsimpy import ...`.
+- Fix `Cosine` and `OverlapCoefficient` raising `ZeroDivisionError` when whitespace normalization leaves an empty shingle profile; similarity is now 0 in that case.
+- Fix named SIFT4 token matchers (`options={'tokenmatcher': ...}`) raising `KeyError`.
+- Faster `Levenshtein` implementation and a memory-efficient rolling-row `LongestCommonSubsequence` (same results, fewer allocations).
+- Test on Python 3.10-3.13.
 
 ## Users
 * [StringSimilarity.NET](https://github.com/feature23/StringSimilarity.NET) a .NET port of java-string-similarity
