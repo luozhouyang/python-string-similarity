@@ -38,12 +38,18 @@ class LongestCommonSubsequence(StringDistance):
         if s1 is None:
             raise TypeError("Argument s1 is NoneType.")
         s0_len, s1_len = len(s0), len(s1)
-        x, y = s0[:], s1[:]
-        matrix = [[0] * (s1_len + 1) for _ in range(s0_len + 1)]
+        # only the previous row is ever read, so keep two rolling rows
+        # instead of the full matrix
+        prev = [0] * (s1_len + 1)
+        curr = [0] * (s1_len + 1)
         for i in range(1, s0_len + 1):
+            ch0 = s0[i - 1]
             for j in range(1, s1_len + 1):
-                if x[i - 1] == y[j - 1]:
-                    matrix[i][j] = matrix[i - 1][j - 1] + 1
+                if ch0 == s1[j - 1]:
+                    curr[j] = prev[j - 1] + 1
                 else:
-                    matrix[i][j] = max(matrix[i][j - 1], matrix[i - 1][j])
-        return matrix[s0_len][s1_len]
+                    up = prev[j]
+                    left = curr[j - 1]
+                    curr[j] = up if up >= left else left
+            prev, curr = curr, prev
+        return prev[s1_len]
