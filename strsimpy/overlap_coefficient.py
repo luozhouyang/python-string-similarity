@@ -20,6 +20,8 @@ class OverlapCoefficient(ShingleBased, NormalizedStringDistance, NormalizedStrin
             return 1.0
         union = set()
         profile0, profile1 = self.get_profile(s0), self.get_profile(s1)
+        if not profile0 or not profile1:
+            return 0.0
         for k in profile0.keys():
             union.add(k)
         for k in profile1.keys():

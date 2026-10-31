@@ -29,6 +29,7 @@ from .metric_lcs import MetricLCS
 from .ngram import NGram
 from .normalized_levenshtein import NormalizedLevenshtein
 from .optimal_string_alignment import OptimalStringAlignment
+from .overlap_coefficient import OverlapCoefficient
 from .qgram import QGram
 from .shingle_based import ShingleBased
 from .sorensen_dice import SorensenDice

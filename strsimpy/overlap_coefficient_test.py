@@ -32,6 +32,15 @@ class TestOverlapCoefficient(unittest.TestCase):
         self.assertEqual(1 / 2, sim.similarity(s1, s2))
         self.assertEqual(1 / 2, sim.distance(s1, s2))
 
+    def test_empty_profile_after_whitespace_normalization(self):
+        sim = OverlapCoefficient(3)
+        for short in ("   ", "\t\n "):
+            for left, right in ((short, "eating"), ("eating", short)):
+                with self.subTest(left=left, right=right):
+                    self.assertEqual(0.0, sim.similarity(left, right))
+                    self.assertEqual(1.0, sim.distance(left, right))
+        self.assertEqual(1.0, sim.similarity("   ", "   "))
+
 
 if __name__ == "__main__":
     unittest.main()
