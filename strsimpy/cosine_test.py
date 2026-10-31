@@ -25,6 +25,31 @@ from .cosine import Cosine
 
 class TestCosine(unittest.TestCase):
 
+    def test_whitespace_normalization_can_remove_all_shingles(self):
+        cos = Cosine(4)
+        for short in ('    ', '0  s', '\t\n  ', 'a  b'):
+            for left, right in ((short, 'foo bar'), ('foo bar', short)):
+                with self.subTest(left=left, right=right):
+                    self.assertEqual(cos.similarity(left, right), 0.0)
+                    self.assertEqual(cos.distance(left, right), 1.0)
+
+    def test_empty_profiles(self):
+        cos = Cosine(4)
+        for left, right in (({}, {'test': 1}), ({'test': 1}, {}), ({}, {}),
+                            ({'test': 0}, {'test': 1}),
+                            ({'test': 1}, {'test': 0})):
+            with self.subTest(left=left, right=right):
+                self.assertEqual(cos.similarity_profiles(left, right), 0.0)
+
+    def test_nonempty_profiles_and_equal_strings(self):
+        cos = Cosine(4)
+        self.assertAlmostEqual(
+            cos.similarity_profiles({'test': 2}, {'test': 3}), 1.0)
+        self.assertEqual(cos.similarity_profiles({'abcd': 1}, {'efgh': 1}), 0.0)
+        self.assertEqual(cos.similarity('    ', '    '), 1.0)
+        self.assertEqual(cos.similarity('', ''), 1.0)
+        self.assertEqual(cos.similarity('a', 'b'), 0.0)
+
     def test_cosine(self):
         cos = Cosine(1)
         s = ['', ' ', 'Shanghai', 'ShangHai', 'Shang Hai']

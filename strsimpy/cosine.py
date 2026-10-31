@@ -45,10 +45,14 @@ class Cosine(ShingleBased, NormalizedStringDistance,
             return 0.0
         profile0 = self.get_profile(s0)
         profile1 = self.get_profile(s1)
-        return self._dot_product(profile0, profile1) / (self._norm(profile0) * self._norm(profile1))
+        return self.similarity_profiles(profile0, profile1)
 
     def similarity_profiles(self, profile0, profile1):
-        return self._dot_product(profile0, profile1) / (self._norm(profile0) * self._norm(profile1))
+        norm0 = self._norm(profile0)
+        norm1 = self._norm(profile1)
+        if norm0 == 0 or norm1 == 0:
+            return 0.0
+        return self._dot_product(profile0, profile1) / (norm0 * norm1)
 
     @staticmethod
     def _dot_product(profile0, profile1):
