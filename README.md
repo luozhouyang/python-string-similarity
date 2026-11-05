@@ -1,16 +1,17 @@
 # python-string-similarity
 
-![Python package](https://github.com/luozhouyang/python-string-similarity/workflows/Python%20package/badge.svg)
+[![CI](https://github.com/luozhouyang/python-string-similarity/actions/workflows/python-package.yml/badge.svg)](https://github.com/luozhouyang/python-string-similarity/actions/workflows/python-package.yml)
 [![PyPI version](https://badge.fury.io/py/strsimpy.svg)](https://badge.fury.io/py/strsimpy)
 [![Python](https://img.shields.io/pypi/pyversions/strsimpy.svg?style=plastic)](https://badge.fury.io/py/strsimpy)
 
-Python3.x implementation of [tdebatty/java-string-similarity](https://github.com/tdebatty/java-string-similarity)
+Rust implementation with Python bindings of [tdebatty/java-string-similarity](https://github.com/tdebatty/java-string-similarity)
 
 
-A library implementing different string similarity and distance measures. A dozen of algorithms (including Levenshtein edit distance and sibblings, Jaro-Winkler, Longest Common Subsequence, cosine similarity etc.) are currently implemented. Check the summary table below for the complete list...
+A library implementing different string similarity and distance measures. A dozen of algorithms (including Levenshtein edit distance and sibblings, Jaro-Winkler, Longest Common Subsequence, cosine similarity etc.) are currently implemented. The algorithms are written in Rust and exposed as an extension module through [PyO3](https://pyo3.rs/), while the public Python API is unchanged. Check the summary table below for the complete list...
 
 - [python-string-similarity](#python-string-similarity)
   - [Download](#download)
+  - [Implementation](#implementation)
   - [Overview](#overview)
   - [Normalized, metric, similarity and distance](#normalized-metric-similarity-and-distance)
     - [(Normalized) similarity and distance](#normalized-similarity-and-distance)
@@ -33,6 +34,7 @@ A library implementing different string similarity and distance measures. A doze
     - [Overlap coefficient (i.e., Szymkiewicz-Simpson)](#overlap-coefficient-ie-szymkiewicz-simpson)
   - [Experimental](#experimental)
     - [SIFT4](#sift4)
+  - [Development](#development)
   - [Changelog](#changelog)
   - [Users](#users)
 
@@ -48,6 +50,16 @@ pip install -U strsimpy
 
 Supported on Python 3.10+.
 
+Prebuilt abi3 wheels are published for:
+
+- Linux: x86_64 and aarch64, both manylinux (glibc) and musllinux (Alpine)
+- macOS: x86_64 and arm64
+- Windows: x64
+
+Installing from the source distribution requires a Rust toolchain (1.85 or
+newer) and [maturin](https://www.maturin.rs/); `pip` handles both automatically
+when no wheel is available.
+
 All public classes can be imported from the package root:
 
 ```python
@@ -60,6 +72,22 @@ from strsimpy import (
 ```
 
 The per-module imports used in the examples below (`from strsimpy.levenshtein import Levenshtein`, etc.) remain supported.
+
+## Implementation
+
+The project is a Rust workspace with a thin Python packaging layer:
+
+```text
+crates/strsimpy-core/   Pure Rust implementations of every algorithm
+crates/strsimpy-py/     PyO3 bindings (the strsimpy._strsimpy extension module)
+python/strsimpy/        Python package, base classes and per-module compatibility shims
+tests/                  Python integration tests
+```
+
+All string algorithms operate on Unicode code points, matching Python's
+`len(str)` and indexing semantics. The Rust core has its own unit tests and is
+usable as a normal Rust library; the Python package adds the historical class
+API, base classes and module layout.
 
 ## Overview
 
@@ -206,12 +234,12 @@ print(damerau.distance('ABCDEF', 'POIU'))
 Will produce:
 
 ```
-1.0
-2.0
-1.0
-1.0
-1.0
-6.0
+1
+2
+1
+1
+1
+6
 ```
 
 ## Optimal String Alignment
@@ -231,7 +259,7 @@ print(optimal_string_alignment.distance('CA', 'ABC'))
 Will produce:
 
 ```
-3.0
+3
 ```
 
 ## Jaro-Winkler
@@ -417,13 +445,60 @@ from strsimpy import SIFT4
 
 s = SIFT4()
 
-# result: 11.0
-s.distance('This is the first string', 'And this is another string') # 11.0
-# result: 12.0
+# result: 11
+s.distance('This is the first string', 'And this is another string') # 11
+# result: 12
 s.distance('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Amet Lorm ispum dolor sit amet, consetetur adixxxpiscing elit.', maxoffset=10)
 ```
 
+## Development
+
+Prerequisites: Python 3.10+, Rust 1.85+ and a C compiler. [maturin](https://www.maturin.rs/) drives the build.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install maturin pytest "black==26.10.1" "ruff==0.17.3"
+maturin develop          # build the extension and install it in the venv
+pytest                   # Python integration tests
+black --check python tests   # verify formatting
+ruff check --select RUF022 python tests   # verify __all__ ordering
+cargo test --workspace   # Rust unit tests
+cargo clippy --workspace --all-targets -- -D warnings
+cargo fmt --all -- --check
+```
+
+Python code is formatted with [Black](https://black.readthedocs.io/) using its
+recommended defaults (88 columns, configured in `pyproject.toml`). Apply the
+formatter with `black python tests`. `__all__` lists are checked with Ruff's
+`RUF022` rule.
+
+Build release artifacts locally with:
+
+```bash
+maturin build --release --out dist
+maturin sdist --out dist
+```
+
+CI runs the Rust checks and the Python test suite on Python 3.10-3.13. The
+release workflow builds abi3 wheels for Linux, macOS and Windows and publishes
+them to PyPI together with the source distribution.
+
 ## Changelog
+
+### 0.4.0
+- Reimplemented all algorithms in Rust and exposed them through PyO3. The
+  Python API, package root exports and per-module imports are unchanged.
+- Published abi3 wheels (Python 3.10+) for Linux (manylinux and musllinux,
+  x86_64/aarch64), macOS (x86_64/arm64) and Windows x64.
+- Fixed `OptimalStringAlignment` returning 0 when one of the strings is empty.
+- Fixed `SorensenDice` raising `ZeroDivisionError` when both shingle profiles
+  are empty; similarity is now 0 in that case.
+- `NGram` now uses the upstream `java-string-similarity` loop bounds, fixing
+  too-small distances for some length-mismatched inputs.
+- Added a Rust test suite and expanded the Python tests.
+- Python sources are formatted with Black (`black --check` in CI).
+- `__all__` ordering is enforced in CI with Ruff's `RUF022` rule.
 
 ### 0.3.0
 - Export `JaroWinkler` and `OverlapCoefficient` from the package root, so every public class is importable as `from strsimpy import ...`.

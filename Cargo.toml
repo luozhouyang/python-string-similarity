@@ -1,0 +1,15 @@
+[workspace]
+members = ["crates/strsimpy-core", "crates/strsimpy-py"]
+resolver = "2"
+
+[workspace.package]
+version = "0.4.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+repository = "https://github.com/luozhouyang/python-string-similarity"
+authors = ["ZhouYang Luo <zhouyang.luo@gmail.com>"]
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
