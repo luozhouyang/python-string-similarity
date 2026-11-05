@@ -1,0 +1,13 @@
+[package]
+name = "strsimpy-core"
+description = "Pure Rust implementation of string similarity and distance measures"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lib]
+name = "strsimpy_core"
+path = "src/lib.rs"

@@ -1,0 +1,22 @@
+[package]
+name = "strsimpy-py"
+description = "PyO3 bindings for the strsimpy Python package"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[lib]
+name = "_strsimpy"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.30.1", features = ["abi3-py310"] }
+strsimpy-core = { path = "../strsimpy-core" }
+
+[features]
+default = []
+extension-module = ["pyo3/extension-module"]

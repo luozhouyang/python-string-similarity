@@ -1,0 +1,58 @@
+[build-system]
+requires = ["maturin>=1.16,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "strsimpy"
+dynamic = ["version"]
+description = "A library implementing different string similarity and distance measures"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "ZhouYang Luo", email = "zhouyang.luo@gmail.com" }]
+keywords = [
+    "string",
+    "similarity",
+    "distance",
+    "levenshtein",
+    "jaro-winkler",
+    "rust",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Rust",
+    "Topic :: Text Processing :: General",
+]
+
+[project.urls]
+Homepage = "https://github.com/luozhouyang/python-string-similarity"
+Repository = "https://github.com/luozhouyang/python-string-similarity"
+Issues = "https://github.com/luozhouyang/python-string-similarity/issues"
+
+[tool.maturin]
+bindings = "pyo3"
+manifest-path = "crates/strsimpy-py/Cargo.toml"
+module-name = "strsimpy._strsimpy"
+python-source = "python"
+features = ["extension-module"]
+strip = true
+include = [{ path = "tests/**/*", format = "sdist" }]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
