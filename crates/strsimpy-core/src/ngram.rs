@@ -4,13 +4,14 @@
 ///
 /// The implementation follows Kondrak's algorithm as used by
 /// `java-string-similarity`: the first string is prefixed with `n - 1`
-/// newline padding characters and the edit distance between n-gram profiles
-/// is normalized by the length of the longest input string.
+/// padding markers distinct from input characters. The edit distance between
+/// n-gram profiles is normalized by the length of the longest input string.
 pub fn distance(s0: &str, s1: &str, n: usize) -> f64 {
     assert!(n > 0, "n must be greater than zero");
 
-    let a: Vec<char> = s0.chars().collect();
-    let b: Vec<char> = s1.chars().collect();
+    // None is reserved for padding; every input character is Some(c).
+    let a: Vec<Option<char>> = s0.chars().map(Some).collect();
+    let b: Vec<Option<char>> = s1.chars().map(Some).collect();
 
     if a == b {
         return 0.0;
@@ -32,20 +33,18 @@ pub fn distance(s0: &str, s1: &str, n: usize) -> f64 {
         return 1.0 - matched as f64 / sl.max(tl) as f64;
     }
 
-    const SPECIAL: char = '\n';
-
-    let mut sa = vec![SPECIAL; sl + n - 1];
+    let mut sa = vec![None; sl + n - 1];
     sa[n - 1..].copy_from_slice(&a);
 
     let mut previous: Vec<f64> = (0..=sl).map(|i| i as f64).collect();
     let mut current = vec![0.0f64; sl + 1];
-    let mut t_j = vec![SPECIAL; n];
+    let mut t_j = vec![None; n];
 
     for j in 1..=tl {
         if j < n {
             let padding = n - j;
-            t_j[..padding].fill(SPECIAL);
-            t_j[padding..n].copy_from_slice(&b[..n - padding]);
+            t_j[..padding].fill(None);
+            t_j[padding..n].copy_from_slice(&b[..j]);
         } else {
             t_j.copy_from_slice(&b[j - n..j]);
         }
@@ -58,7 +57,7 @@ pub fn distance(s0: &str, s1: &str, n: usize) -> f64 {
                 let sc = sa[i - 1 + ni];
                 if sc != t_j[ni] {
                     cost += 1;
-                } else if sc == SPECIAL {
+                } else if sc.is_none() {
                     denominator -= 1;
                 }
             }
@@ -127,6 +126,14 @@ mod tests {
     fn short_string_branch() {
         assert!((distance("a", "b", 3) - 1.0).abs() < 1e-12);
         assert!((distance("ab", "ac", 3) - 0.5).abs() < 1e-12);
+    }
+
+    #[test]
+    fn input_newlines_are_not_padding() {
+        for (n, expected) in [(1, 0.5), (2, 0.25)] {
+            assert_eq!(distance("\na", "\nb", n), expected);
+            assert_eq!(distance("a\n", "b\n", n), distance("ax", "bx", n));
+        }
     }
 
     #[test]
