@@ -39,6 +39,34 @@ class TestNGram(unittest.TestCase):
             ngram.distance("ABABABAB", "POIULKJH"),
         )
 
+    def test_newlines_are_input_characters(self):
+        self.assertEqual(0.5, NGram(1).distance("\na", "\nb"))
+        self.assertEqual(0.25, NGram(2).distance("\na", "\nb"))
+
+    def test_newline_relabeling_preserves_distance(self):
+        pairs = [
+            ("\na", "\nb"),
+            ("a\nb", "a\nc"),
+            ("a\n", "b\n"),
+            ("\n\n", "\na"),
+            ("a\n\nb", "\na\nb"),
+            ("\na\0", "\nb\0"),
+            ("海\na", "海\nb"),
+            ("", "\n"),
+        ]
+        for n in range(1, 5):
+            ngram = NGram(n)
+            for a, b in pairs:
+                with self.subTest(n=n, a=a, b=b):
+                    # Relabeling an input character cannot change edit costs.
+                    expected = ngram.distance(
+                        a.replace("\n", "x"), b.replace("\n", "x")
+                    )
+                    actual = ngram.distance(a, b)
+                    self.assertAlmostEqual(expected, actual)
+                    self.assertGreaterEqual(actual, 0.0)
+                    self.assertLessEqual(actual, 1.0)
+
     def test_invalid_n(self):
         with self.assertRaises(ValueError):
             NGram(0)
