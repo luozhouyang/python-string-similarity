@@ -166,7 +166,7 @@ class TestPublicApi(unittest.TestCase):
         self.assertEqual({"ab": 1, "bc": 1}, shingle_profile("abc", 2))
 
     def test_version(self):
-        self.assertEqual("0.4.0", strsimpy.__version__)
+        self.assertEqual("0.4.1", strsimpy.__version__)
 
     def test_integral_distance_return_types(self):
         # The original Python implementation returned an int for non-identical

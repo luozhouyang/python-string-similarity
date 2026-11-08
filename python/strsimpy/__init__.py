@@ -38,7 +38,7 @@ from ._strsimpy import (
 try:
     __version__ = _package_version("strsimpy")
 except PackageNotFoundError:  # pragma: no cover - only when not installed
-    __version__ = "0.4.0"
+    __version__ = "0.4.1"
 
 __all__ = [
     "SIFT4",

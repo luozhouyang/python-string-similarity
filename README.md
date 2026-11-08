@@ -486,6 +486,12 @@ them to PyPI together with the source distribution.
 
 ## Changelog
 
+### 0.4.1
+- Fixed `NGram` treating literal newline characters in the input as its internal
+  padding marker, which produced incorrect edit costs and normalized distances
+  above 1 (for example, `NGram(1).distance("\na", "\nb")` returned 1.5 instead
+  of 0.5) (#41). Thanks to @Narek-Khachikyan.
+
 ### 0.4.0
 - Reimplemented all algorithms in Rust and exposed them through PyO3. The
   Python API, package root exports and per-module imports are unchanged.

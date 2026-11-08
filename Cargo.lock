@@ -103,11 +103,11 @@ dependencies = [
 
 [[package]]
 name = "strsimpy-core"
-version = "0.4.0"
+version = "0.4.1"
 
 [[package]]
 name = "strsimpy-py"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "pyo3",
  "strsimpy-core",
