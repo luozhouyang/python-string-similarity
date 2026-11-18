@@ -1,4 +1,5 @@
 import unittest
+from functools import partial
 
 from strsimpy.sift4 import SIFT4, SIFT4Options
 
@@ -93,8 +94,36 @@ class SIFT4Test(unittest.TestCase):
         options.tokenizer = list
         self.assertIs(options.tokenizer, list)
 
+    def test_ngram_tokenizer_windows(self):
+        self.assertEqual(["ab", "bc", "cd"], SIFT4Options.ngramtokenizer("abcd", 2))
+        self.assertEqual(["ab"], SIFT4Options.ngramtokenizer("ab", 2))
+        self.assertEqual(
+            ["he", "el", "ll", "lo"], SIFT4Options.ngramtokenizer("hello", 2)
+        )
+        self.assertEqual(["abcd"], SIFT4Options.ngramtokenizer("abcd", 4))
+        self.assertEqual([], SIFT4Options.ngramtokenizer("abc", 5))
+        self.assertEqual([], SIFT4Options.ngramtokenizer("abc", 0))
+        self.assertEqual([], SIFT4Options.ngramtokenizer("", 2))
+        # The default n matches NGram's default of 2.
+        self.assertEqual(["ab", "bc", "cd"], SIFT4Options.ngramtokenizer("abcd"))
+
+    def test_named_ngram_tokenizer(self):
+        strings = ("abcd", "abXY")
+        options = {"tokenizer": "ngram"}
+        expected = SIFT4().distance(
+            *strings,
+            options={"tokenizer": partial(SIFT4Options.ngramtokenizer, n=2)},
+        )
+        self.assertEqual(2, expected)
+        self.assertEqual(expected, SIFT4().distance(*strings, options=options))
+        self.assertIsInstance(
+            SIFT4().distance("alpha beta", "alpha gamma", options=options), int
+        )
+
     def test_static_helpers(self):
-        self.assertEqual(["he", "el"], SIFT4Options.ngramtokenizer("hello", 2))
+        self.assertEqual(
+            ["he", "el", "ll", "lo"], SIFT4Options.ngramtokenizer("hello", 2)
+        )
         self.assertEqual(
             ["hello", "world"],
             SIFT4Options.wordsplittokenizer("  hello\tworld\n"),

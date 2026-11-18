@@ -28,6 +28,10 @@ impl Levenshtein {
         Self
     }
 
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<Levenshtein>(), ()).into_py_any(py)
+    }
+
     fn distance(&self, py: Python<'_>, s0: &str, s1: &str) -> PyResult<Py<PyAny>> {
         utils::zero_or_int(py, s0 == s1, core::levenshtein::distance(s0, s1))
     }
@@ -42,6 +46,10 @@ impl NormalizedLevenshtein {
     #[new]
     fn new() -> Self {
         Self
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<NormalizedLevenshtein>(), ()).into_py_any(py)
     }
 
     fn __getattr__(&self, py: Python<'_>, name: &str) -> PyResult<Py<PyAny>> {
@@ -72,6 +80,10 @@ impl Damerau {
         Self
     }
 
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<Damerau>(), ()).into_py_any(py)
+    }
+
     fn distance(&self, py: Python<'_>, s0: &str, s1: &str) -> PyResult<Py<PyAny>> {
         utils::zero_or_int(py, s0 == s1, core::damerau::distance(s0, s1))
     }
@@ -86,6 +98,10 @@ impl OptimalStringAlignment {
     #[new]
     fn new() -> Self {
         Self
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<OptimalStringAlignment>(), ()).into_py_any(py)
     }
 
     fn distance(&self, py: Python<'_>, s0: &str, s1: &str) -> PyResult<Py<PyAny>> {
@@ -117,6 +133,22 @@ impl JaroWinkler {
     #[pyo3(signature = (threshold=0.7))]
     fn new(threshold: f64) -> Self {
         Self { threshold }
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<JaroWinkler>(), (self.threshold,)).into_py_any(py)
+    }
+
+    /// Match details as `[matches, transpositions, prefix, max_len]`.
+    #[staticmethod]
+    fn matches(s0: &str, s1: &str) -> Vec<usize> {
+        let details = core::jaro_winkler::matches(s0, s1);
+        vec![
+            details.matches,
+            details.transpositions,
+            details.prefix,
+            details.max_len,
+        ]
     }
 
     fn get_threshold(&self) -> f64 {
@@ -161,6 +193,10 @@ impl LongestCommonSubsequence {
         Self
     }
 
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<LongestCommonSubsequence>(), ()).into_py_any(py)
+    }
+
     fn distance(&self, py: Python<'_>, s0: &str, s1: &str) -> PyResult<Py<PyAny>> {
         utils::zero_or_int(
             py,
@@ -184,6 +220,10 @@ impl MetricLCS {
     #[new]
     fn new() -> Self {
         Self
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<MetricLCS>(), ()).into_py_any(py)
     }
 
     fn __getattr__(&self, py: Python<'_>, name: &str) -> PyResult<Py<PyAny>> {
@@ -214,6 +254,10 @@ impl NGram {
             return Err(PyValueError::new_err("n must be greater than 0"));
         }
         Ok(Self { n })
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<NGram>(), (self.n,)).into_py_any(py)
     }
 
     #[getter]
@@ -249,6 +293,10 @@ impl QGram {
         Self { k }
     }
 
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<QGram>(), (self.k,)).into_py_any(py)
+    }
+
     fn get_k(&self) -> usize {
         self.k
     }
@@ -271,10 +319,13 @@ impl QGram {
 
     #[staticmethod]
     fn distance_profile(
-        profile0: HashMap<String, usize>,
-        profile1: HashMap<String, usize>,
-    ) -> usize {
-        core::qgram::distance_profile(&profile0, &profile1)
+        profile0: &Bound<'_, PyAny>,
+        profile1: &Bound<'_, PyAny>,
+    ) -> PyResult<usize> {
+        Ok(core::qgram::distance_profile(
+            &utils::extract_profile_usize(profile0)?,
+            &utils::extract_profile_usize(profile1)?,
+        ))
     }
 }
 
@@ -289,6 +340,10 @@ impl Cosine {
     #[new]
     fn new(k: usize) -> Self {
         Self { k }
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<Cosine>(), (self.k,)).into_py_any(py)
     }
 
     fn get_k(&self) -> usize {
@@ -317,10 +372,13 @@ impl Cosine {
 
     fn similarity_profiles(
         &self,
-        profile0: HashMap<String, f64>,
-        profile1: HashMap<String, f64>,
-    ) -> f64 {
-        core::cosine::similarity_profiles(&profile0, &profile1)
+        profile0: &Bound<'_, PyAny>,
+        profile1: &Bound<'_, PyAny>,
+    ) -> PyResult<f64> {
+        Ok(core::cosine::similarity_profiles(
+            &utils::extract_profile_f64(profile0)?,
+            &utils::extract_profile_f64(profile1)?,
+        ))
     }
 }
 
@@ -335,6 +393,10 @@ impl Jaccard {
     #[new]
     fn new(k: usize) -> Self {
         Self { k }
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<Jaccard>(), (self.k,)).into_py_any(py)
     }
 
     fn get_k(&self) -> usize {
@@ -376,6 +438,10 @@ impl SorensenDice {
         Self { k }
     }
 
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<SorensenDice>(), (self.k,)).into_py_any(py)
+    }
+
     fn get_k(&self) -> usize {
         self.k
     }
@@ -413,6 +479,10 @@ impl OverlapCoefficient {
     #[pyo3(signature = (k=3))]
     fn new(k: usize) -> Self {
         Self { k }
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<OverlapCoefficient>(), (self.k,)).into_py_any(py)
     }
 
     fn get_k(&self) -> usize {

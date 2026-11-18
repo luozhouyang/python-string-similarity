@@ -1,6 +1,7 @@
 //! Python wrapper for weighted Levenshtein distance.
 
 use pyo3::prelude::*;
+use pyo3::IntoPyObjectExt;
 use strsimpy_core::weighted_levenshtein::{self as core, WeightedCosts};
 
 fn module_function(py: Python<'_>, name: &str) -> PyResult<Py<PyAny>> {
@@ -89,6 +90,26 @@ impl WeightedLevenshtein {
             insertion_cost_fn,
             deletion_cost_fn,
         }
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        let substitution = match &self.substitution_cost_fn {
+            Some(function) => function.clone_ref(py),
+            None => py.None(),
+        };
+        let insertion = match &self.insertion_cost_fn {
+            Some(function) => function.clone_ref(py),
+            None => py.None(),
+        };
+        let deletion = match &self.deletion_cost_fn {
+            Some(function) => function.clone_ref(py),
+            None => py.None(),
+        };
+        (
+            py.get_type::<WeightedLevenshtein>(),
+            (substitution, insertion, deletion),
+        )
+            .into_py_any(py)
     }
 
     fn distance(&self, py: Python<'_>, s0: &str, s1: &str) -> PyResult<f64> {

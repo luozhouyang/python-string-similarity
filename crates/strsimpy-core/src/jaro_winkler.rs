@@ -4,7 +4,10 @@
 pub const DEFAULT_THRESHOLD: f64 = 0.7;
 const PREFIX_SCALE: f64 = 0.1;
 
-pub(crate) struct MatchDetails {
+/// Details collected while matching two strings: match count, transpositions,
+/// common prefix length and the length of the longer input.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct MatchDetails {
     pub matches: usize,
     pub transpositions: usize,
     pub prefix: usize,
@@ -51,7 +54,8 @@ pub fn distance_with_threshold(s0: &str, s1: &str, threshold: f64) -> f64 {
     1.0 - similarity_with_threshold(s0, s1, threshold)
 }
 
-pub(crate) fn matches(s0: &str, s1: &str) -> MatchDetails {
+/// Matching details for the Jaro-Winkler algorithm.
+pub fn matches(s0: &str, s1: &str) -> MatchDetails {
     let chars0: Vec<char> = s0.chars().collect();
     let chars1: Vec<char> = s1.chars().collect();
 

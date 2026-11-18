@@ -49,6 +49,13 @@ class TestJaroWinkler(unittest.TestCase):
         self.assertEqual(0.7, JaroWinkler().get_threshold())
         self.assertEqual(0.5, JaroWinkler(0.5).get_threshold())
 
+    def test_matches(self):
+        # [matches, transpositions, prefix length, longer input length]
+        self.assertEqual([6, 1, 3, 6], JaroWinkler.matches("martha", "marhta"))
+        self.assertEqual([6, 1, 3, 6], JaroWinkler().matches("martha", "marhta"))
+        self.assertEqual([0, 0, 0, 3], JaroWinkler.matches("", "abc"))
+        self.assertEqual([3, 0, 3, 3], JaroWinkler.matches("abc", "abc"))
+
 
 if __name__ == "__main__":
     unittest.main()

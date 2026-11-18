@@ -1,4 +1,6 @@
 import unittest
+from collections import UserDict
+from types import MappingProxyType
 
 from strsimpy.cosine import Cosine
 
@@ -61,6 +63,23 @@ class TestCosine(unittest.TestCase):
 
     def test_get_k(self):
         self.assertEqual(2, Cosine(2).get_k())
+
+    def test_similarity_profiles_accept_mapping_wrappers(self):
+        cos = Cosine(2)
+        left = MappingProxyType({"ab": 2, "bc": 1})
+        right = UserDict({"ab": 1, "cd": 1})
+        self.assertAlmostEqual(0.6324555320336759, cos.similarity_profiles(left, right))
+        self.assertAlmostEqual(
+            cos.similarity_profiles({"ab": 2, "bc": 1}, {"ab": 1, "cd": 1}),
+            cos.similarity_profiles(left, right),
+        )
+        self.assertAlmostEqual(
+            cos.similarity_profiles(
+                MappingProxyType(cos.get_profile("My first string")),
+                MappingProxyType(cos.get_profile("My other string...")),
+            ),
+            cos.similarity("My first string", "My other string..."),
+        )
 
 
 if __name__ == "__main__":

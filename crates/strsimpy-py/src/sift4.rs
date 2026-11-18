@@ -173,6 +173,10 @@ impl SIFT4Options {
         Ok(resolved)
     }
 
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<SIFT4Options>(), (self.options(py)?,)).into_py_any(py)
+    }
+
     #[getter]
     fn maxdistance(&self) -> i64 {
         self.maxdistance
@@ -269,14 +273,18 @@ impl SIFT4Options {
         ))
     }
 
+    /// Splits `s` into overlapping character n-grams.
+    ///
+    /// `n` defaults to 2 so the `"ngram"` named tokenizer preset can be used
+    /// with `SIFT4`: the algorithm invokes tokenizers with a single argument.
     #[staticmethod]
+    #[pyo3(signature = (s, n=2))]
     fn ngramtokenizer(s: &str, n: usize) -> Vec<String> {
         let chars: Vec<char> = s.chars().collect();
-        if chars.is_empty() {
+        if n == 0 || chars.len() < n {
             return Vec::new();
         }
-        let count = chars.len().saturating_sub(n).saturating_sub(1);
-        (0..count)
+        (0..=chars.len() - n)
             .map(|i| chars[i..i + n].iter().collect())
             .collect()
     }
@@ -453,6 +461,10 @@ impl SIFT4 {
     #[new]
     fn new() -> Self {
         Self
+    }
+
+    fn __reduce__(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        (py.get_type::<SIFT4>(), ()).into_py_any(py)
     }
 
     #[pyo3(signature = (s1, s2, maxoffset=5, options=None))]
