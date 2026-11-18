@@ -451,6 +451,12 @@ s.distance('This is the first string', 'And this is another string') # 11
 s.distance('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Amet Lorm ispum dolor sit amet, consetetur adixxxpiscing elit.', maxoffset=10)
 ```
 
+A tokenizer can be supplied as a callable or as one of the named presets
+`"ngram"`, `"wordsplit"` and `"characterfrequency"`. The `"ngram"` preset
+splits into overlapping character bigrams (`SIFT4Options.ngramtokenizer` with
+its default `n=2`); use `functools.partial(SIFT4Options.ngramtokenizer, n=3)`
+to choose another n-gram size.
+
 ## Development
 
 Prerequisites: Python 3.10+, Rust 1.85+ and a C compiler. [maturin](https://www.maturin.rs/) drives the build.
@@ -485,6 +491,22 @@ release workflow builds abi3 wheels for Linux, macOS and Windows and publishes
 them to PyPI together with the source distribution.
 
 ## Changelog
+
+### 0.4.2
+- Restored `JaroWinkler.matches()` as a public static method returning
+  `[matches, transpositions, prefix length, longer input length]` (#45).
+- Added pickle support to every calculator, preserving constructor options
+  (`JaroWinkler` threshold, `NGram.n`, the shingle `k` and weighted-Levenshtein
+  cost functions). This restores multiprocessing workflows that pass bound
+  `distance` methods to workers (#44).
+- `Cosine.similarity_profiles()` and `QGram.distance_profile()` accept any
+  Python mapping again, including `MappingProxyType`, `UserDict` and `Counter`
+  (#46).
+- Fixed `SIFT4Options.ngramtokenizer()` dropping the final two n-grams, which
+  made suffix-only differences invisible; it now returns all `len(s) - n + 1`
+  windows (#42).
+- Fixed the `tokenizer="ngram"` SIFT4 preset raising `TypeError`; n-gram
+  tokenization now defaults to `n=2` (#43).
 
 ### 0.4.1
 - Fixed `NGram` treating literal newline characters in the input as its internal
