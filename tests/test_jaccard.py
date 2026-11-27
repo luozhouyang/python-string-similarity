@@ -32,6 +32,13 @@ class TestJaccard(unittest.TestCase):
         self.assertEqual(0.0, jaccard.similarity("a", "b"))
         self.assertEqual(1.0, jaccard.distance("a", "b"))
 
+    def test_whitespace_normalization_can_remove_all_shingles(self):
+        jaccard = Jaccard(4)
+        for left, right in (("0  s", "a  b"), ("    ", "\t\n  "), ("    ", "foo bar")):
+            with self.subTest(left=left, right=right):
+                self.assertEqual(0.0, jaccard.similarity(left, right))
+                self.assertEqual(1.0, jaccard.distance(left, right))
+
     def test_get_profile_and_k(self):
         jaccard = Jaccard(2)
         self.assertEqual(2, jaccard.get_k())

@@ -15,6 +15,9 @@ pub fn similarity(s0: &str, s1: &str, k: usize) -> f64 {
     let profile0 = shingle::profile(s0, k);
     let profile1 = shingle::profile(s1, k);
     let union: HashSet<&String> = profile0.keys().chain(profile1.keys()).collect();
+    if union.is_empty() {
+        return 0.0;
+    }
     let intersection = profile0.len() + profile1.len() - union.len();
     1.0 * intersection as f64 / union.len() as f64
 }
@@ -71,5 +74,12 @@ mod tests {
     fn whitespace_is_normalized() {
         assert_eq!(similarity("   ", "   ", 3), 1.0);
         assert_eq!(similarity("   ", "eating", 3), 0.0);
+    }
+
+    #[test]
+    fn whitespace_normalization_can_empty_both_profiles() {
+        assert_eq!(similarity("a   ", "b   ", 3), 0.0);
+        assert_eq!(distance("a   ", "b   ", 3), 1.0);
+        assert_eq!(similarity("   ", "    ", 3), 0.0);
     }
 }
